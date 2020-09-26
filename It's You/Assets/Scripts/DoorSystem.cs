@@ -7,7 +7,8 @@ public class DoorSystem : MonoBehaviour
 	Quaternion beginnigRot;
 	public bool isLocked, isOpen, key = false;
 	public bool secretDoor, isTriggered;
-	public float Angle, Smooth;
+	public float Angle, Smooth, preferredangle;
+
 	
 
 	private void Awake()
@@ -20,7 +21,7 @@ public class DoorSystem : MonoBehaviour
 		if (!isLocked)
 		{
 			isOpen = !isOpen;
-			Angle = 90;
+			Angle = preferredangle;
 			if (isTriggered)
 			{
 				isTriggered = false;
@@ -30,7 +31,7 @@ public class DoorSystem : MonoBehaviour
 		{
 			if (key)
 			{
-				Angle = 90;
+				Angle = preferredangle;
 				isOpen = !isOpen;
 				
 			}

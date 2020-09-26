@@ -8,9 +8,14 @@ public class FPSController : MonoBehaviour
 
 	public CharacterController cc;
 	public float gravity ;
+	Animator anim;
 
 	Vector3 vec;
 
+	private void Awake()
+	{
+		anim = transform.GetChild(0).GetComponent<Animator>();
+	}
 
 	private void Update()
 	{
@@ -25,7 +30,14 @@ public class FPSController : MonoBehaviour
 
 		cc.Move(vec * Time.deltaTime);
 
-
+		if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+		{
+			anim.Play("Walk Anim", -1, 0.0f);
+		}
+		if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
+		{
+			anim.Play("Idle", -1, 0.0f);
+		}
 	}
 
 }
