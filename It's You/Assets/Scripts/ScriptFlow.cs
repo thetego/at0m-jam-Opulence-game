@@ -8,27 +8,26 @@ public class ScriptFlow : MonoBehaviour
 	FPSController fps;
 	MouseLook ml;
 	Animator anim;
-	public Image background;
-	public Image comics;
+	CameraHit ch;
+	public Image comics, skip;
 
 	private void Awake()
 	{
 		ml = Camera.main.GetComponent<MouseLook>();
 		fps = Camera.main.transform.parent.transform.parent.GetComponent<FPSController>();
-		anim= GetComponent<Animator>();
+		anim= Camera.main.transform.parent.GetComponent<Animator>();
+		ch= Camera.main.GetComponent<CameraHit>();
 	}
 
 	private void Update()
 	{
 		if (comics.gameObject.activeSelf)
 		{
-			background.color = Color.Lerp(background.color, new Color(256, 256, 256, 1), 0.02f);
-			print(background.color.a);
-			if (background.color.a >= 0.95f)
-			{
-				comics.color = Color.Lerp(comics.color, new Color(0, 0, 0, 1), 0.02f);
-				StartCoroutine(Wait());
-			}
+			anim.Play("Idle");
+			ch.cursor.gameObject.SetActive(false);
+			comics.color = Color.Lerp(comics.color, new Color(255, 255, 255, 1), 0.05f);
+			skip.color = Color.Lerp(skip.color, new Color(255, 255, 255, 1), 0.05f);
+			
 		}
 	}
 
@@ -36,24 +35,22 @@ public class ScriptFlow : MonoBehaviour
 	{
 		if (transform.tag == "First" && other.tag == "Player")
 		{
-			background.gameObject.SetActive(true);
+			skip.gameObject.SetActive(true);
 			comics.gameObject.SetActive(true);
+			ml.UnlockCursor();
 			ml.enabled = false;
 			fps.enabled = false;
 		}
 	}
-	IEnumerator Wait()
+
+	public void Skip()
 	{
-		yield return new WaitForSeconds(20);
-		yield return null;
-		print("asd");
-		Skip();
-	}
-	 void Skip()
-	{
-		background.gameObject.SetActive(false);
+		fps.gameObject.transform.position =new Vector3(transform.GetChild(0).transform.position.x,fps.gameObject.transform.position.y, transform.GetChild(0).transform.position.z);
 		comics.gameObject.SetActive(false);
+		skip.gameObject.SetActive(false);
 		ml.enabled = true;
+		ml.LockCursor();
+		ch.cursor.gameObject.SetActive(true);
 		fps.enabled = true;
 	}
 }

@@ -14,6 +14,7 @@ public class DoorSystem : MonoBehaviour
 	private void Awake()
 	{
 		beginnigRot = transform.localRotation;
+		Smooth = 0.05f;
 	}
 
 	public void IsTheDoorLocked()
